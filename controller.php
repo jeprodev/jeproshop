@@ -465,8 +465,9 @@ class JeproshopController extends JControllerLegacy
         }
 
         // Set available keywords
-        $anchor = '&task=view&product_id=' . $product->product_id .  ((!$alias) ? '&rewrite=' . $product->getFieldByLang('link_rewrite') : $alias) . ((!$ean13) ? '&ean13=' . $product->ean13 : $ean13);
-        $anchor .= '&meta_keywords=' . JeproshopTools::str2url($product->getFieldByLang('meta_keywords')) . '&meta_title=' . JeproshopTools::str2url($product->getFieldByLang('meta_title'));
+        $anchor = '&task=view&product_id=' . $product->product_id .  ((!$alias) ? '&rewrite=' . $product->getFieldByLang('link_rewrite') : $alias) . ((!$ean13) ? '&amp;ean13=' . $product->ean13 : $ean13);
+        $anchor .= '&meta_keywords=' . (isset($product->getFieldByLang('meta_keywords')[$lang_id]) ? JeproshopTools::str2url($product->getFieldByLang('meta_keywords')[$lang_id]) : '');
+        $anchor .= '&meta_title=' . (isset($product->getFieldByLang('meta_title')[$lang_id]) ? JeproshopTools::str2url($product->getFieldByLang('meta_title')[$lang_id]) : '' );
 
         if ($this->hasKeyword('product', $lang_id, 'manufacturer', $shop_id)) {
             $params['manufacturer'] = JeproshopTools::str2url($product->isFullyLoaded ? $product->manufacturer_name : JeproshopManufacturerModelManufacturer::getNameById($product->manufacturer_id));
@@ -497,8 +498,6 @@ class JeproshopController extends JControllerLegacy
             $params['categories'] = implode('/', $cats);
         }
         $anchor .= $product_attribute_id ? '&product_attribute_id='  . $product_attribute_id : '';
-
-
 
         return JRoute::_('index.php?option=com_jeproshop&view=product' . $anchor);
     }
@@ -541,7 +540,7 @@ class JeproshopController extends JControllerLegacy
         // legacy mode or default image
         $theme = ((JeproshopShopModelShop::isFeaturePublished() && file_exists(COM_JEPROSHOP_PRODUCT_IMAGE_DIRECTORY . $ids . ($type ? '_'.$type : '').'_'.(int)JeproshopContext::getContext()->shop->theme_id .'.jpg')) ? '_'.JeproshopContext::getContext()->shop->theme_id : '');
         if ((JeproshopSettingModelSetting::getValue('legacy_images') && (file_exists(COM_JEPROSHOP_PRODUCT_IMAGE_DIRECTORY . $ids . ($type ? '-'.$type : '').$theme.'.jpg'))) || ($not_default = strpos($ids, 'default') !== false)) {
-            if ($this->allow_link_rewrite == 1 && !$not_default){ echo $name;
+            if ($this->allow_link_rewrite == 1 && !$not_default){
                 $uri_path = JURI::base() . $ids.($type ? '_'.$type : '').$theme.'/'.$name.'.jpg';
             }else{
                 $uri_path = JURI::base() . 'components/com_jeproshop/assets/themes/' . $ids.($type ? '_'.$type : '').$theme.'.jpg';
@@ -583,10 +582,10 @@ class JeproshopController extends JControllerLegacy
         $params = array();
         $params['id'] = $category->category_id;
         $params['rewrite'] = (!$alias) ? $category->link_rewrite : $alias;
-        $params['meta_keywords'] =	JeproshopTools::str2url($category->getFieldByLang('meta_keywords'));
-        $params['meta_title'] = JeproshopTools::str2url($category->getFieldByLang('meta_title'));
+        $params['meta_keywords'] =	JeproshopTools::str2url($category->getFieldByLang('meta_keywords')[$lang_id]);
+        $params['meta_title'] = JeproshopTools::str2url($category->getFieldByLang('meta_title')[$lang_id]);
 
-        // Selected filters is used by the module blocklayered
+        // Selected filters is used by the module block layered
         $selected_filters = is_null($selected_filters) ? '' : $selected_filters;
 
         if (empty($selected_filters))
@@ -601,6 +600,10 @@ class JeproshopController extends JControllerLegacy
     }
 
     public function setMedia(){
+
+    }
+
+    public function getPageLink($view){
 
     }
 

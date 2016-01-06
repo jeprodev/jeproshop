@@ -97,15 +97,15 @@ if(isset($this->products) && $this->products){
                         <a class="quick_view" href="<?php echo JRoute::_($product->link); ?>" rel="<?php echo $product->link; ?>"><span><?php echo JText::_('COM_JEPROSHOP_QUICK_VIEW_LABEL'); ?> </span></a>
                         <?php } ?>
                         <?php if(!$this->catalog_mode && ((isset($product->show_price) && $product->show_price) || (isset($product->available_for_order) && $product->available_for_order))){ ?>
-                        <div class="content_price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                        <div class="content_price" itemprop="offers" itemscope itemtype="http://schema.org/Offer" >
                             <?php if(isset($product->show_price) && $product->show_price && !isset($this->restricted_country_mode)){ ?>
-							<span itemprop="price" class="price product-price" >
+							<span itemprop="price" class="price product_price" >
 							    <?php if(!$this->display_price){ echo JeproshopTools::convertPrice($product->price); }else{ echo JeproshopTools::convertPrice($product->price_tax_exc); } ?>
 							</span>
                             <meta itemprop="price_currency" content="<?php echo $this->currency->iso_code; ?>" />
                             <?php if(isset($product->specific_prices) && $product->specific_prices && isset($product->specific_prices->reduction) && $product->specific_prices->reduction > 0){ ?>
                             <?php /*{hook h="displayProductPriceBlock" product=$product type="old_price"} **/ ?>
-                            <span class="old-price product-price">{displayWtPrice p=$product->price_without_reduction}</span>
+                            <span class="old-price product_price"><?php echo JeproshopTools::displayPrice($product->price_without_reduction); ?></span>
                             <?php if($product->specific_prices->reduction_type == 'percentage'){ ?>
                             <span class="price_percent_reduction">-<?php echo $product->specific_prices->reduction * 100; ?>%</span>
                             <?php }
@@ -132,7 +132,7 @@ if(isset($this->products) && $this->products){
                             <?php echo $product->name; ?>
                         </a>
                     </h5>
-                    <?php /*{hook h='displayProductListReviews' product=$product} */ ?>
+                    <?php /*{hook h='displayProductListReviews' product=$product} */  ?>
                     <p class="product-desc" itemprop="description"><?php echo substr(strip_tags($product->short_description), 0, 360); ?></p>
                     <?php if (!$this->catalog_mode AND ((isset($product->show_price) && $product->show_price) || (isset($product->available_for_order) && $product->available_for_order))){ ?>
                     <div itemprop="offers" itemscope itemtype="http://schema.org/Offer" class="content-price">
@@ -146,7 +146,7 @@ if(isset($this->products) && $this->products){
 						<span class="old-price product-price"><?php echo JeproshopTools::displayPrice($product->price_without_reduction, $this->context->currency); ?></span>
                         <?php //{hook h="displayProductPriceBlock" id_product=$product->id_product type="old_price"} ?>
                         <?php if($product->specific_prices->reduction_type == 'percentage'){ ?>
-                        <span class="price-percent-reduction">-<?php echo $product->specific_prices->reduction * 100 . '%'; ?>
+                        <span class="price-percent-reduction">-<?php echo $product->specific_prices->reduction * 100 . '%'; ?></span>
                         <?php }  ?>
                         <?php }  ?>
                         <?php /*{hook h="displayProductPriceBlock" product=$product type="price"}
@@ -195,7 +195,7 @@ if(isset($this->products) && $this->products){
                     <?php }
                     }  ?>
                 </div>
-                <?php //if($page_name != ''){ ?>
+                <?php if($page_name != ''){ ?>
                 <div class="functional_buttons clearfix">
                     <?php /*{hook h='displayProductListFunctionalButtons' product=$product} */ ?>
                     <?php if(isset($this->comparator_max_item) && $this->comparator_max_item){ ?>
@@ -204,7 +204,7 @@ if(isset($this->products) && $this->products){
                     </div>
                     <?php } ?>
                 </div>
-                <?php // }  ?>
+                <?php  }  ?>
             </div><!-- .product-container> -->
         </li>
             <?php if((($currentIndex+1)%$nbItemsPerLine) == 0){ ?><div style="clear: both" ></div><?php } $currentIndex = $currentIndex + 1; ?>
@@ -218,7 +218,7 @@ if(isset($this->products) && $this->products){
         var comparator_max_item=$comparator_max_item}
         var comparedProductsIds=$compared_products}*/
         jQuery(document).ready(function(){
-            //jQuery('#featured_products_block_center').JeproshopAjaxCart();
+            //**jQuery('#featured_products_block_center').JeproshopAjaxCart();
         });
     </script>
     <div style="clear: both" ></div>

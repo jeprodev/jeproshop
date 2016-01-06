@@ -219,7 +219,7 @@ class JeproshopProductModelProduct extends JModelLegacy
     /*** @var array Tags */
     public $tags;
 
-    public $specific_price;
+    public $specific_prices;
 
     /**
      * Note:  prefix is "PRODUCT_TYPE" because TYPE_ is used in ObjectModel (definition)
@@ -351,7 +351,7 @@ class JeproshopProductModelProduct extends JModelLegacy
 
             $this->base_price = $this->price;
 
-            $this->price = JeproshopProductModelProduct::getStaticPrice((int)$this->product_id, false, null, 6, null, false, true, 1, false, null, null, null, $this->specific_price);
+            $this->price = JeproshopProductModelProduct::getStaticPrice((int)$this->product_id, false, null, 6, null, false, true, 1, false, null, null, null, $this->specific_prices);
             $this->unit_price = ($this->unit_price_ratio != 0 ? $this->price / $this->unit_price_ratio : 0);
             if($this->product_id){
                 $this->tags = JeproshopTagModelTag::getProductTags((int)$this->product_id);
@@ -769,7 +769,7 @@ class JeproshopProductModelProduct extends JModelLegacy
      * @param integer $customer_id Customer ID (for customer group reduction)
      * @param integer $cart_id Cart ID. Required when the cookie is not accessible (e.g., inside a payment module, a cron task...)
      * @param integer $address_id Customer address ID. Required for price (tax included) calculation regarding the guest localization
-     * @param null $specific_price_output
+     * @param null $specificPriceOutput
      * @param boolean $with_ecotax insert ecotax in price output.
      * @param bool $use_group_reduction
      * @param JeproshopContext $context
@@ -780,7 +780,7 @@ class JeproshopProductModelProduct extends JModelLegacy
      * @return float Product price
      */
     public static function getStaticPrice($product_id, $use_tax = true, $product_attribute_id = null, $decimals = 6, $only_reduction = false, $use_reduction = true, $quantity = 1, $customer_id = null,
-        $cart_id = null, $address_id = null, $specific_price_output = null, $with_ecotax = true, $use_group_reduction = true, JeproshopContext $context = null, $use_customer_price = true){
+        $cart_id = null, $address_id = null, $specificPriceOutput = null, $with_ecotax = true, $use_group_reduction = true, JeproshopContext $context = null, $use_customer_price = true){
         if(!$context){
             $context = JeproshopContext::getContext();
         }
@@ -799,7 +799,7 @@ class JeproshopProductModelProduct extends JModelLegacy
             /*
              * When a user (e.g., guest, customer, Google...) is on Jeproshop, he has already its cart as the global (see /init.php)
              * When a non-user calls directly this method (e.g., payment module...) is on JeproShop, he does not have already it BUT knows the cart ID
-             * When called from the back office, cart ID can be inexistant
+             * When called from the back office, cart ID can be inexistent
              */
             if (!$cart_id && !isset($context->employee)){
                 JError::raiseError(500, __FILE__ . ' ' . __LINE__);
@@ -866,7 +866,7 @@ class JeproshopProductModelProduct extends JModelLegacy
 
         return JeproshopProductModelProduct::priceCalculation($context->shop->shop_id, $product_id,
             $product_attribute_id, $country_id, $state_id, $zipcode, $currency_id, $group_id,
-            $quantity, $use_tax, $decimals, 	$only_reduction, $use_reduction, $with_ecotax, $specific_price_output,
+            $quantity, $use_tax, $decimals, 	$only_reduction, $use_reduction, $with_ecotax, $specificPriceOutput,
             $use_group_reduction, $customer_id, $use_customer_price, $cart_id, $cart_quantity
         );
     }
@@ -874,31 +874,31 @@ class JeproshopProductModelProduct extends JModelLegacy
     /**
      * Price calculation / Get product price
      *
-     * @param integer $shop_id Shop id
-     * @param integer $product_id Product id
-     * @param integer $product_attribute_id Product attribute id
-     * @param integer $country_id Country id
-     * @param integer $state_id State id
-     * @param $zipcode
-     * @param integer $currency_id Currency id
-     * @param integer $group_id Group id
+     * @param integer $shopId Shop id
+     * @param integer $productId Product id
+     * @param integer $productAttributeId Product attribute id
+     * @param integer $countryId Country id
+     * @param integer $stateId State id
+     * @param $zipCode
+     * @param integer $currencyId Currency id
+     * @param integer $groupId Group id
      * @param integer $quantity Quantity Required for Specific prices : quantity discount application
-     * @param boolean $use_tax with (1) or without (0) tax
+     * @param boolean $useTax with (1) or without (0) tax
      * @param integer $decimals Number of decimals returned
-     * @param boolean $only_reduction Returns only the reduction amount
-     * @param boolean $use_reduction Set if the returned amount will include reduction
-     * @param boolean $with_ecotax insert ecotax in price output.
-     * @param $specific_price
-     * @param $use_group_reduction
-     * @param int $customer_id
-     * @param bool $use_customer_price
-     * @param int $cart_id
-     * @param int $real_quantity
-     * @internal param \variable_reference $specific_price_output If a specific price applies regarding the previous parameters, this variable is filled with the corresponding SpecificPrice object*    If a specific price applies regarding the previous parameters, this variable is filled with the corresponding SpecificPrice object
+     * @param boolean $onlyReduction Returns only the reduction amount
+     * @param boolean $useReduction Set if the returned amount will include reduction
+     * @param boolean $withEcotax insert ecotax in price output.
+     * @param $specificPrice
+     * @param $useGroupReduction
+     * @param int $customerId
+     * @param bool $useCustomerPrice
+     * @param int $cartId
+     * @param int $realQuantity
+     * @internal param \variable_reference $specificPriceOutput If a specific price applies regarding the previous parameters, this variable is filled with the corresponding SpecificPrice object*    If a specific price applies regarding the previous parameters, this variable is filled with the corresponding SpecificPrice object
      * @return float Product price
      */
-    public static function priceCalculation($shop_id, $product_id, $product_attribute_id, $country_id, $state_id, $zipcode, $currency_id, $group_id, $quantity, $use_tax,
-        $decimals, $only_reduction, $use_reduction, $with_ecotax, &$specific_price, $use_group_reduction, $customer_id = 0, $use_customer_price = true, $cart_id = 0, $real_quantity = 0){
+    public static function priceCalculation($shopId, $productId, $productAttributeId, $countryId, $stateId, $zipCode, $currencyId, $groupId, $quantity, $useTax,
+        $decimals, $onlyReduction, $useReduction, $withEcotax, &$specificPrice, $useGroupReduction, $customerId = 0, $useCustomerPrice = true, $cartId = 0, $realQuantity = 0){
         static $address = null;
         static $context = null;
 
@@ -910,48 +910,48 @@ class JeproshopProductModelProduct extends JModelLegacy
             $context = JeproshopContext::getContext()->cloneContext();
         }
 
-        if ($shop_id !== null && $context->shop->shop_id != (int)$shop_id){
-            $context->shop = new JeproshopShopModelShop((int)$shop_id);
+        if ($shopId !== null && $context->shop->shop_id != (int)$shopId){
+            $context->shop = new JeproshopShopModelShop((int)$shopId);
         }
 
-        if (!$use_customer_price){
-            $customer_id = 0;
+        if (!$useCustomerPrice){
+            $customerId = 0;
         }
 
-        if ($product_attribute_id === null){
-            $product_attribute_id = JeproshopProductModelProduct::getDefaultAttribute($product_id);
+        if ($productAttributeId === null){
+            $productAttributeId = JeproshopProductModelProduct::getDefaultAttribute($productId);
         }
 
-        $cache_id = $product_id . '_' .$shop_id . '_' . $currency_id . '_' . $country_id . '_' . $state_id . '_' . $zipcode . '_' . $group_id .
-            '_' . $quantity . '_' . $product_attribute_id . '_' .($use_tax?'1':'0').'_' . $decimals.'_'. ($only_reduction ? '1' :'0').
-            '_'.($use_reduction ?'1':'0') . '_' . $with_ecotax. '_' . $customer_id . '_'.(int)$use_group_reduction.'_'.(int)$cart_id.'-'.(int)$real_quantity;
+        $cache_key = $productId . '_' .$shopId . '_' . $currencyId . '_' . $countryId . '_' . $stateId . '_' . $zipCode . '_' . $groupId .
+            '_' . $quantity . '_' . $productAttributeId . '_' .($useTax?'1':'0').'_' . $decimals.'_'. ($onlyReduction ? '1' :'0').
+            '_'.($useReduction ?'1':'0') . '_' . $withEcotax. '_' . $customerId . '_'.(int)$useGroupReduction.'_'.(int)$cartId.'-'.(int)$realQuantity;
 
         // reference parameter is filled before any returns
-        $specific_price = JeproshopSpecificPriceModelSpecificPrice::getSpecificPrice((int)$product_id, $shop_id, $currency_id,
-            $country_id, $group_id, $quantity, $product_attribute_id, $customer_id, $cart_id, $real_quantity
+        $specificPrice = JeproshopSpecificPriceModelSpecificPrice::getSpecificPrice((int)$productId, $shopId, $currencyId,
+            $countryId, $groupId, $quantity, $productAttributeId, $customerId, $cartId, $realQuantity
         );
 
-        if (isset(self::$_prices[$cache_id])){
-            return self::$_prices[$cache_id];
+        if (isset(self::$_prices[$cache_key])){
+            return self::$_prices[$cache_key];
         }
         $db = JFactory::getDBO();
         // fetch price & attribute price
-        $cache_id_2 = $product_id.'-'.$shop_id;
+        $cache_id_2 = $productId.'-'.$shopId;
         if (!isset(self::$_pricesLevel2[$cache_id_2])){
             $select = "SELECT product_shop." . $db->quoteName('price') . ", product_shop." . $db->quoteName('ecotax');
             $from = $db->quoteName('#__jeproshop_product') . " AS product INNER JOIN " . $db->quoteName('#__jeproshop_product_shop');
-            $from .= " AS product_shop ON (product_shop.product_id =product.product_id AND product_shop.shop_id = " .(int)$shop_id  . ")";
+            $from .= " AS product_shop ON (product_shop.product_id =product.product_id AND product_shop.shop_id = " .(int)$shopId  . ")";
 
             if (JeproshopCombinationModelCombination::isFeaturePublished()){
                 $select .= ", product_attribute_shop.product_attribute_id, product_attribute_shop." . $db->quoteName('price') . " AS attribute_price, product_attribute_shop.default_on";
                 $leftJoin = " LEFT JOIN " . $db->quoteName('#__jeproshop_product_attribute') .  " AS product_attribute ON product_attribute.";
                 $leftJoin .= $db->quoteName('product_id') . " = product." . $db->quoteName('product_id') . " LEFT JOIN " . $db->quoteName('#__jeproshop_product_attribute_shop');
-                $leftJoin .= " AS product_attribute_shop ON (product_attribute_shop.product_attribute_id = product_attribute.product_attribute_id AND product_attribute_shop.shop_id = " .(int)$shop_id .")";
+                $leftJoin .= " AS product_attribute_shop ON (product_attribute_shop.product_attribute_id = product_attribute.product_attribute_id AND product_attribute_shop.shop_id = " .(int)$shopId .")";
             }else{
                 $select .= ", 0 as product_attribute_id";
                 $leftJoin = "";
             }
-            $query = $select . " FROM " . $from . $leftJoin . " WHERE product." . $db->quoteName('product_id') . " = " . (int)$product_id;
+            $query = $select . " FROM " . $from . $leftJoin . " WHERE product." . $db->quoteName('product_id') . " = " . (int)$productId;
 
             $db->setQuery($query);
             $results = $db->loadObjectList();
@@ -970,95 +970,95 @@ class JeproshopProductModelProduct extends JModelLegacy
             }
         }
 
-        if (!isset(self::$_pricesLevel2[$cache_id_2][(int)$product_attribute_id])){
+        if (!isset(self::$_pricesLevel2[$cache_id_2][(int)$productAttributeId])){
             return;
         }
 
-        $result = self::$_pricesLevel2[$cache_id_2][(int)$product_attribute_id];
+        $result = self::$_pricesLevel2[$cache_id_2][(int)$productAttributeId];
 
-        if (!$specific_price || $specific_price->price < 0){
+        if (!$specificPrice || $specificPrice->price < 0){
             $price = (float)$result['price'];
         }else{
-            $price = (float)$specific_price->price;
+            $price = (float)$specificPrice->price;
         }
 
         // convert only if the specific price is in the default currency (id_currency = 0)
-        if (!$specific_price || !($specific_price->price >= 0 && $specific_price->currency_id)){
-            $price = JeproshopTools::convertPrice($price, $currency_id);
+        if (!$specificPrice || !($specificPrice->price >= 0 && $specificPrice->currency_id)){
+            $price = JeproshopTools::convertPrice($price, $currencyId);
         }
 
         // Attribute price
-        if (is_array($result) && (!$specific_price || !$specific_price->product_attribute_id || $specific_price->price < 0)){
-            $attribute_price = JeproshopTools::convertPrice($result['attribute_price'] !== null ? (float)$result['attribute_price'] : 0, $currency_id);
+        if (is_array($result) && (!$specificPrice || !$specificPrice->product_attribute_id || $specificPrice->price < 0)){
+            $attribute_price = JeproshopTools::convertPrice($result['attribute_price'] !== null ? (float)$result['attribute_price'] : 0, $currencyId);
             // If you want the default combination, please use NULL value instead
-            if ($product_attribute_id !== false){
+            if ($productAttributeId !== false){
                 $price += $attribute_price;
             }
         }
 
         // Tax
-        $address->country_id = $country_id;
-        $address->state_id = $state_id;
-        $address->postcode = $zipcode;
+        $address->country_id = $countryId;
+        $address->state_id = $stateId;
+        $address->postcode = $zipCode;
 
-        $tax_manager = JeproshopTaxManagerFactory::getManager($address, JeproshopProductModelProduct::getTaxRulesGroupIdByProductId((int)$product_id, $context));
+        $tax_manager = JeproshopTaxManagerFactory::getManager($address, JeproshopProductModelProduct::getTaxRulesGroupIdByProductId((int)$productId, $context));
         $product_tax_calculator = $tax_manager->getTaxCalculator();
 
         // Add Tax
-        if ($use_tax){
+        if ($useTax){
             $price = $product_tax_calculator->addTaxes($price);
         }
 
         // Reduction
-        $specific_price_reduction = 0;
-        if (($only_reduction || $use_reduction) && $specific_price){
-            if ($specific_price->reduction_type == 'amount'){
-                $reduction_amount = $specific_price->reduction;
+        $specificPriceReduction = 0;
+        if (($onlyReduction || $useReduction) && $specificPrice){
+            if ($specificPrice->reduction_type == 'amount'){
+                $reduction_amount = $specificPrice->reduction;
 
-                if (!$specific_price->currency_id){
-                    $reduction_amount = JeproshopTools::convertPrice($reduction_amount, $currency_id);
+                if (!$specificPrice->currency_id){
+                    $reduction_amount = JeproshopTools::convertPrice($reduction_amount, $currencyId);
                 }
-                $specific_price_reduction = !$use_tax ? $product_tax_calculator->removeTaxes($reduction_amount) : $reduction_amount;
+                $specificPriceReduction = !$useTax ? $product_tax_calculator->removeTaxes($reduction_amount) : $reduction_amount;
             }else{
-                $specific_price_reduction = $price * $specific_price->reduction;
+                $specificPriceReduction = $price * $specificPrice->reduction;
             }
         }
 
-        if ($use_reduction){
-            $price -= $specific_price_reduction;
+        if ($useReduction){
+            $price -= $specificPriceReduction;
         }
 
         // Group reduction
-        if($use_group_reduction){
-            $reduction_from_category = JeproshopGroupReductionModelGroupReduction::getValueForProduct($product_id, $group_id);
+        if($useGroupReduction){
+            $reduction_from_category = JeproshopGroupReductionModelGroupReduction::getValueForProduct($productId, $groupId);
             if ($reduction_from_category !== false){
                 $group_reduction = $price * (float)$reduction_from_category;
             }else {
                 // apply group reduction if there is no group reduction for this category
-                $group_reduction = (($reduction = JeproshopGroupModelGroup::getReductionByGroupId($group_id)) != 0) ? ($price * $reduction / 100) : 0;
+                $group_reduction = (($reduction = JeproshopGroupModelGroup::getReductionByGroupId($groupId)) != 0) ? ($price * $reduction / 100) : 0;
             }
         }else{
             $group_reduction = 0;
         }
 
-        if ($only_reduction){
-            return JeproshopTools::roundPrice($group_reduction + $specific_price_reduction, $decimals);
+        if ($onlyReduction){
+            return JeproshopTools::roundPrice($group_reduction + $specificPriceReduction, $decimals);
         }
 
-        if ($use_reduction){  $price -= $group_reduction;   }
+        if ($useReduction){  $price -= $group_reduction;   }
 
         // Eco Tax
-        if (($result['ecotax'] || isset($result['attribute_ecotax'])) && $with_ecotax){
+        if (($result['ecotax'] || isset($result['attribute_ecotax'])) && $withEcotax){
             $ecotax = $result['ecotax'];
             if (isset($result['attribute_ecotax']) && $result['attribute_ecotax'] > 0){
                 $ecotax = $result['attribute_ecotax'];
             }
-            if ($currency_id){
-                $ecotax = JeproshopTools::convertPrice($ecotax, $currency_id);
+            if ($currencyId){
+                $ecotax = JeproshopTools::convertPrice($ecotax, $currencyId);
             }
 
-            if ($use_tax){
-                // reinit the tax manager for ecotax handling
+            if ($useTax){
+                // re-init the tax manager for ecotax handling
                 $tax_manager = JeproshopTaxManagerFactory::getManager($address, (int)  JeproshopSettingModelSetting::getValue('ecotax_tax_rules_group_id'));
                 $ecotax_tax_calculator = $tax_manager->getTaxCalculator();
                 $price += $ecotax_tax_calculator->addTaxes($ecotax);
@@ -1071,8 +1071,8 @@ class JeproshopProductModelProduct extends JModelLegacy
             $price = 0;
         }
 
-        self::$_prices[$cache_id] = $price;
-        return self::$_prices[$cache_id];
+        self::$_prices[$cache_key] = $price;
+        return self::$_prices[$cache_key];
     }
 
     /**
@@ -1380,6 +1380,7 @@ class JeproshopProductModelProduct extends JModelLegacy
 
         // Datas
         $row->category = JeproshopCategoryModelCategory::getLinkRewrite((int)$row->default_category_id, (int)$lang_id);
+
         $row->link = $context->controller->getProductLink((int)$row->product_id, $row->link_rewrite, $row->category, $row->ean13);
 
         $row->attribute_price = 0;
@@ -1415,12 +1416,12 @@ class JeproshopProductModelProduct extends JModelLegacy
                 6, null, false, false
             );
         }
-        $specific_prices = null;
+        $specificPrices = null;
         $row->reduction = JeproshopProductModelProduct::getStaticPrice((int)$row->product_id, (bool)$useTax, (int)$row->product_attribute_id,
-            6, null, true, true, 1, true,  null, null, null, $specific_prices
+            6, null, true, true, 1, true,  null, null, null, $specificPrices
         );
 
-        $row->specific_prices = $specific_prices;
+        $row->specific_prices = $specificPrices;
 
         $row->quantity = JeproshopProductModelProduct::getQuantity((int)$row->product_id, 0, isset($row->cache_is_pack) ? $row->cache_is_pack : null );
 

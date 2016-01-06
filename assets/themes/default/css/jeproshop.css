@@ -671,5 +671,16 @@ input[type="submit"].btn-block, input[type="reset"].btn-block, input[type="butto
 .std{ width: 98%; margin:0 auto;}
 .date-container select{ width: 100px; }
 
+/** default page product items style **/
+.ajax_block_product{}
+.first_item{}
+.last_item{}
+.last_item_of_line{}
+.last_line{}
+.price-percent-reduction{}
+.old-price{}
+.product-price{}
+.color-list-container{}
+
 #jform_authentication .control-group .control-label{ width:26%; }
 #jform_authentication .control-group .controls{ width:70%; }

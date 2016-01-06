@@ -105,7 +105,7 @@ class JeproshopDefaultModelDefault extends JModelLegacy
         $db->setQuery($query);
         $result = $db->loadObjectList();
         if ($order_by == 'order_price'){
-            JeproshopTools::orderbyPrice($result, $order_way);
+            JeproshopTools::orderByPrice($result, $order_way);
         }
         if (!$result){ return array(); }
         self::$_pagination = new JPagination($total, $limit_start, $limit);

@@ -621,5 +621,8 @@ jQuery.extend(JeproshopTools.prototype, {
         });
         if (div.length)
             image.src = div.css('background-image').replace(/url\("?|"?\)$/ig, '');
-    }
+    },
+	getXhr(){
+		
+	}
 });

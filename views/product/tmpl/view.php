@@ -219,7 +219,7 @@ if(!count($this->errors)){
                     <div id="jform_availability_date_value" class="controls" ><?php echo JeproshopTools::dateFormat($this->product->available_date, false); ?></div>
                 </div>
                 <!-- Out of stock hook -->
-                <div id="jform_out_of_stock_fields" <?php if($this->product->quantity > 0){ ?> style="display: none;" <?php } ?> >{$HOOK_PRODUCT_OOS} </div>
+                <div id="jform_out_of_stock_fields" <?php if($this->product->quantity > 0){ ?> style="display: none;" <?php } ?> ><!-- {$HOOK_PRODUCT_OOS} --></div>
                 <?php if(isset($this->extra_right) && $this->extra_right){ echo $this->extra_right;  } ?>
                 <?php if(!$this->content_only){ ?>
                     <!-- use full links-->
@@ -435,6 +435,8 @@ if(!count($this->errors)){
             if(isset($this->packItems) && count($this->packItems) > 0){
                 echo JHtml::_('bootstrap.addTab', 'product_form', 'pack_content', JText::_('COM_JEPROSHOP_PACK_CONTENT_TAB_LABEL')) . $this->loadTemplate('pack_items') . JHtml::_('bootstrap.endTab');
             }
+            echo JHtml::_('bootstrap.addTab', 'product_form', 'product_version', JText::_('COM_JEPROSHOP_VERSION_LABEL')) . $this->loadTemplate('version') . JHtml::_('bootstrap.endTab');
+            echo JHtml::_('bootstrap.addTab', 'product_form', 'product_history', JText::_('COM_JEPROSHOP_HISTORY_LABEL')) . $this->loadTemplate('history') . JHtml::_('bootstrap.endTab');
             echo JHtml::_('bootstrap.endTabSet');
         }
         ?>
