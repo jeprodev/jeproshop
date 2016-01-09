@@ -10,10 +10,22 @@
     <version>0.0.0.1</version>
     <description>COM_JEPROSHOP_XML_DESCRIPTION</description>
 
+    <install>
+        <sql>
+            <file driver="mysql" charset="utf-8" >sql/install.mysql-utf8.sql</file>
+        </sql>
+    </install>
+
+    <uninstall>
+        <sql>
+            <file driver="mysql" charset="utf-8" >sql/uninstall.mysql-utf8.sql</file>
+        </sql>
+    </uninstall>
+
     <scriptfile>script.php</scriptfile>
 
     <updateservers>
-        <server></server>
+        <server type="extension" name="jeproshop" priority="1" >http://github.com/jeprodev/jeproshop/jeproshop_update.xml</server>
     </updateservers>
 
     <files folder="site" >

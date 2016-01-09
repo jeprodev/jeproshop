@@ -1,0 +1,14 @@
+<update>
+    <name>Jeproshop</name>
+    <description></description>
+    <element></element>
+    <type>file</type>
+    <version></version>
+    <infourl></infourl>
+    <downloads>
+        <downloadurl type="full" format="zip" >https://github.com/jeprodev/jeproshop/releases/tag/jeproshop-0.0.0.1.zip</downloadurl>
+    </downloads>
+    <maintener>Jeprodev</maintener>
+    <maintenerurl>http://www.jeprodev.net</maintenerurl>
+    <targetplatform name="joomla" version="3.0" />
+</update>
