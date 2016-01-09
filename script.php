@@ -72,7 +72,7 @@ class com_jeproshopInstallerScript {
     }
 
     private function createDefaultShopData(){
-        $db = JFactory::geDBO();
+        $db = JFactory::getDBO();
         $config = JFactory::getConfig();
         $default_lang_id = JFactory::getLanguage()->get('lang_id');
         $default_category_id = 0;
