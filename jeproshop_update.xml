@@ -4,10 +4,10 @@
         <description>COM_JEPROSHOP_XML_DESCRIPTION</description>
         <element>com_jeproshop</element>
         <type>file</type>
-        <version>0.0.0.6</version>
+        <version>0.0.1.0</version>
         <infourl></infourl>
         <downloads>
-            <downloadurl type="full" format="zip" >https://github.com/jeprodev/jeproshop/releases/jeproshop-0.0.0.6.zip</downloadurl>
+            <downloadurl type="full" format="zip" >https://github.com/jeprodev/jeproshop/releases/jeproshop-0.0.1.0.zip</downloadurl>
         </downloads>
         <maintener>Jeprodev</maintener>
         <maintenerurl>http://www.jeprodev.net</maintenerurl>
