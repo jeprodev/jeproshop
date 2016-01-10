@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <extension type="component" version="3.4" method="upgrade" >
     <name>jeproshop</name>
-    <creationDate></creationDate>
+    <creationDate>September 2014</creationDate>
     <author>Jeprodev</author>
     <authorEmail>develop@jeprodev.net</authorEmail>
     <authorUrl>http://www.jeprodev.net</authorUrl>
-    <copyright></copyright>
-    <license></license>
-    <version>0.0.0.5</version>
+    <copyright>GPL</copyright>
+    <license>GNU LICENSE</license>
+    <version>0.0.0.6</version>
     <description>COM_JEPROSHOP_XML_DESCRIPTION</description>
 
     <install>
