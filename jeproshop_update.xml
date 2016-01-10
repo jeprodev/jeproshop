@@ -1,8 +1,8 @@
 <updates>
     <update>
         <name>Jeproshop</name>
-        <description></description>
-        <element></element>
+        <description>COM_JEPROSHOP_XML_DESCRIPTION</description>
+        <element>com_jeproshop</element>
         <type>file</type>
         <version>0.0.0.6</version>
         <infourl></infourl>
@@ -11,6 +11,6 @@
         </downloads>
         <maintener>Jeprodev</maintener>
         <maintenerurl>http://www.jeprodev.net</maintenerurl>
-        <targetplatform name="joomla" version="3.4" />
+        <targetplatform name="joomla" version="3.2" />
     </update>
 </updates>

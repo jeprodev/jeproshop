@@ -25,7 +25,7 @@
     <scriptfile>script.php</scriptfile>
 
     <updateservers>
-        <server type="extension" name="jeproshop" priority="1" >http://github.com/jeprodev/jeproshop/jeproshop_update.xml</server>
+        <server type="extension" name="jeproshop" priority="1" >http://www.github.com/jeprodev/jeproshop/jeproshop_update.xml</server>
     </updateservers>
 
     <files folder="site" >
