@@ -111,7 +111,7 @@ class JeproshopCookie
 		}else{
 			$this->_cipherToll = new BlowFish($this->_key, $this->_iv);
 		}
-		$this->lang_id = JeproshopLanguageModelLanguage::getLanguage((int)  JeproshopSettingModelSetting::getValue('default_lang'))->lang_id;
+		$this->lang_id = (int)  JeproshopSettingModelSetting::getValue('default_lang');
 		$this->update();
 	}
 	
@@ -127,10 +127,13 @@ class JeproshopCookie
 	public function setExpire($expire){
 		$this->_expire = (int)$expire;
 	}
-	
-	/**
-	 * Setcookie according to php version
-	 */
+
+    /**
+     * Setcookie according to php version
+     *
+     * @param $cookie
+     * @return bool
+     */
 	protected function _setCookie($cookie = NULL){
 		if($cookie){
 			$content = $this->_cipherTool->encrypt($cookie);
@@ -145,8 +148,14 @@ class JeproshopCookie
 			return setcookie($this->_name, $content, $time, $this->_path,  $this->_domain, 0, TRUE);
 		}
 	}
-	
-	/** Get a family of variables (e.g. "filter_") **/
+
+    /**
+     * Get a family of variables (e.g. "filter_")
+     *
+     * @param $origin
+     * *
+     * @return array
+     */
 	public function getFamily($origin) {
 		$result = array();
 		if(count($this->_content) == 0){
@@ -212,7 +221,7 @@ class JeproshopCookie
 			/** Get cookie checksum **/
 			$checksum = crc32($this->_iv . substr($content, 0, strrpos($content, '�') + 2));
 	
-			/** Unserialize cookie content **/
+			/** Un-serialize cookie content **/
 			$tmpTab = explode('�', $content);
 			foreach($tmpTab as $keyAndValue){
 				$tmpTab2 = explode('|', $keyAndValue);

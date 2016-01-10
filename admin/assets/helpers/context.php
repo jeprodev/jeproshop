@@ -94,11 +94,11 @@ class JeproshopContext
 							if ($mobile_detect->isMobile() && !$mobile_detect->isTablet())
 								$this->mobile_device = true;
 								break;
-						case 2: // Only for touchpads
+						case 2: // Only for touch pads
 							if ($mobile_detect->isTablet() && !$mobile_detect->isMobile())
 								$this->mobile_device = true;
 								break;
-						case 3: // For touchpad or mobile devices
+						case 3: // For touch pad or mobile devices
 							if ($mobile_detect->isMobile() || $mobile_detect->isTablet())
 								$this->mobile_device = true;
 								break;

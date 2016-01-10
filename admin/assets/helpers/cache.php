@@ -45,14 +45,20 @@ class JeproshopCache
 	
 	/**
 	 * Store a given value as key value in an array
+     *
+     * @param $key
+     * @param $value
 	 **/
 	public static function store($key, $value){
 		JeproshopCache::$local[$key] = $value;
 	}
-	
-	/**
-	 * Retrieve a value if stored in cache
-	 */
+
+    /**
+     * Retrieve a value if stored in cache
+     *
+     * @param $key
+     * @return null
+     */
 	public static function retrieve($key){
 		return isset(JeproshopCache::$local[$key]) ? JeproshopCache::$local[$key] : null;
 	}
@@ -63,10 +69,13 @@ class JeproshopCache
 	public static function retrieveAll(){
 		return JeproshopCache::$local;
 	}
-	
-	/**
-	 * Check if a key exist in an array
-	 */
+
+    /**
+     * Check if a key exist in an array
+     *
+     * @param $key
+     * @return bool
+     */
 	public static function isStored($key){
 		return isset(JeproshopCache::$local[$key]);
 	}
