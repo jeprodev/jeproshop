@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS `#__jeproshop_language_shop` (
 	`shop_id` INT( 11 ) UNSIGNED NOT NULL,
   	PRIMARY KEY (`lang_id`, `shop_id`),
 	KEY `shop_id` (`shop_id`)
-) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `#__jeproshop_category_shop` (
   `category_id` int(11) NOT NULL,
@@ -1773,9 +1773,6 @@ CREATE TABLE IF NOT EXISTS `#__jeproshop_layered_category`(
   `layered_category_id` int(11) unsigned NOT NULL,
   `shop_id` int(11) unsigned NOT NULL,
   `category_id` int(11) unsigned NOT NULL,
-  `value_id` int(11) unsigned NOT NULL,
-  `value_id` int(11) unsigned NOT NULL,
-  `value_id` int(11) unsigned NOT NULL,
   `value_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`layered_category_id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
