@@ -40,7 +40,7 @@ class JeproshopCategoryViewCategory extends JViewLegacy
         }else{
             $categories_tree = $this->context->controller->category->getParentsCategories();
             $end = end($categories_tree);
-            if(isset($categories_tree) && !JeproshopShopModelShop::isFeaturePublished() && $end->parent_id != 0){
+            if(isset($categories_tree) && !JeproshopShopModelShop::isFeaturePublished() && (isset($end) && $end->parent_id != 0)){
                 $categories_tree = array_merge($categories_tree, array(get_object_vars($this->context->controller->category->getTopCategory())));
             }
         }

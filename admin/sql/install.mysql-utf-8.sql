@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS `#__jeproshop_category` (
   `category_id` int(10) unsigned NOT NULL auto_increment,
   `parent_id` int(10) unsigned NOT NULL,
-  `shop_default_id` int(10) unsigned NOT NULL default 1,
+  `default_shop_id` int(10) unsigned NOT NULL default 1,
   `depth_level` tinyint(3) unsigned NOT NULL default '0',
   `n_left` int(10) unsigned NOT NULL default '0',
   `n_right` int(10) unsigned NOT NULL default '0',
@@ -288,6 +288,22 @@ CREATE TABLE IF NOT EXISTS `#__jeproshop_product_shop` (
   KEY `default_category_id` (`default_category_id`),
   KEY `date_add` (`date_add` , `published` , `visibility`)
 ) ENGINE=InnoDB  DEFAULT CHARACTER SET=utf8;
+
+CREATE TABLE IF NOT EXISTS `#__jeproshop_product_download` (
+  `product_download_id` int(10) unsigned NOT NULL auto_increment,
+  `product_id` int(10) unsigned NOT NULL,
+  `display_filename` tinyint(1) DEFAULT  1,
+  `filename` VARCHAR(255) DEFAULT NULL,
+  `date_add` DATETIME NOT NULL,
+  `date_expiration` DATETIME NOT NULL,
+  `nb_days_accessible` int(10) unsigned NOT NULL,
+  `nb_downloadable` int(10) unsigned NOT NULL DEFAULT 1,
+  `published` tinyint(1) unsigned DEFAULT  1,
+  `ìs_sharable` tinyint(1) unsigned DEFAULT 1,
+  PRIMARY KEY (`product_download_id`),
+  KEY `product_published` (`product_id`, `published`),
+  UNIQUE KEY `product_id` (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 CREATE TABLE IF NOT EXISTS `#__jeproshop_image` (
   `image_id` int(10) unsigned NOT NULL auto_increment,
@@ -690,7 +706,7 @@ CREATE TABLE IF NOT EXISTS `#__jeproshop_customer` (
   `customer_id` int(10) unsigned NOT NULL auto_increment,
   `shop_group_id` INT(11) UNSIGNED NOT NULL DEFAULT '1',
   `shop_id` INT(11) UNSIGNED NOT NULL DEFAULT '1',
-  `gender_id` int(10) unsigned NOT NULL,
+  `title` VARCHAR (5)  NOT NULL,
   `default_group_id` int(10) unsigned NOT NULL DEFAULT '1',
   `lang_id` int(10) unsigned NULL,
   `risk_id` int(10) unsigned NOT NULL DEFAULT '1',
@@ -722,7 +738,6 @@ CREATE TABLE IF NOT EXISTS `#__jeproshop_customer` (
   KEY `customer_email` (`email`),
   KEY `customer_login` (`email`,`passwd`),
   KEY `customer_passwd_id` (`customer_id`,`passwd`),
-  KEY `gender_id` (`gender_id`),
   KEY `shop_group_id` (`shop_group_id`),
   KEY `shop_id` (`shop_id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
@@ -791,7 +806,7 @@ CREATE TABLE IF NOT EXISTS `#__jeproshop_orders` (
   `currency_id` int(10) unsigned NOT NULL,
   `address_delivery_id` int(10) unsigned NOT NULL,
   `address_invoice_id` int(10) unsigned NOT NULL,
-  `current_state` int(10) unsigned NOT NULL,
+  `current_status` int(10) unsigned NOT NULL,
   `secure_key` varchar(32) NOT NULL default '-1',
   `payment` varchar(255) NOT NULL,
   `conversion_rate` decimal(13,6) NOT NULL default 1,
@@ -1490,8 +1505,8 @@ CREATE TABLE IF NOT EXISTS `#__jeproshop_search_word` (
   UNIQUE KEY `lang_id` (`lang_id`,`shop_id`, `word`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__jeproshop_order_state` (
-  	`order_state_id` int(10) UNSIGNED NOT NULL auto_increment,
+CREATE TABLE IF NOT EXISTS `#__jeproshop_order_status` (
+  	`order_status_id` int(10) UNSIGNED NOT NULL auto_increment,
   	`invoice` tinyint(1) UNSIGNED default '0',
 	`send_email` tinyint(1) UNSIGNED NOT NULL default '0',
 	`module_name` VARCHAR(255) NULL DEFAULT NULL,
@@ -1503,16 +1518,16 @@ CREATE TABLE IF NOT EXISTS `#__jeproshop_order_state` (
   	`shipped` tinyint(1) UNSIGNED NOT NULL default '0',
   	`paid` tinyint(1) UNSIGNED NOT NULL default '0',
   	`deleted` tinyint(1) UNSIGNED NOT NULL default '0',
-  	PRIMARY KEY (`order_state_id`),
+  	PRIMARY KEY (`order_status_id`),
   	KEY `module_name` (`module_name`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
-CREATE TABLE IF NOT EXISTS `#__jeproshop_order_state_lang` (
-  	`order_state_id` int(10) unsigned NOT NULL,
+CREATE TABLE IF NOT EXISTS `#__jeproshop_order_status_lang` (
+  	`order_status_id` int(10) unsigned NOT NULL,
   	`lang_id` int(10) unsigned NOT NULL,
   	`name` varchar(64) NOT NULL,
   	`template` varchar(64) NOT NULL,
-  	PRIMARY KEY (`order_state_id`,`lang_id`)
+  	PRIMARY KEY (`order_status_id`,`lang_id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 CREATE TABLE IF NOT EXISTS `#__jeproshop_carrier_shop` (
@@ -1585,12 +1600,12 @@ CREATE TABLE IF NOT EXISTS `#__jeproshop_order_history` (
   `order_history_id` int(10) unsigned NOT NULL auto_increment,
   `employee_id` int(10) unsigned NOT NULL,
   `order_id` int(10) unsigned NOT NULL,
-  `order_state_id` int(10) unsigned NOT NULL,
+  `order_status_id` int(10) unsigned NOT NULL,
   `date_add` datetime NOT NULL,
   PRIMARY KEY (`order_history_id`),
   KEY `order_history_order` (`order_id`),
   KEY `employee_id` (`employee_id`),
-  KEY `order_state_id` (`order_state_id`)
+  KEY `order_status_id` (`order_status_id`)
 )  ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 CREATE TABLE IF NOT EXISTS `#__jeproshop_order_message` (

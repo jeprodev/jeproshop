@@ -159,8 +159,8 @@ class JeproshopCustomerModelCustomer extends JModelLegacy
             $query .= "total_paid_tax_excl / conversion_rate) FROM " . $db->quoteName('#__jeproshop_orders') . " AS ord WHERE ord.customer_id = customer.customer_id AND ord.shop_id IN (";
             $query .= implode(',', JeproshopShopModelShop::getContextListShopIds()) . ") AND customer.published = 1 ) AS total_spent, ( SELECT connection.date_add FROM " . $db->quoteName('#__jeproshop_guest');
             $query .= " AS guest LEFT JOIN " . $db->quoteName('#__jeproshop_connection') . " AS connection ON connection.guest_id = guest.guest_id  WHERE guest.customer_id = customer.customer_id ORDER BY ";
-            $query .= " customer.date_add DESC LIMIT 1 ) AS connect FROM " . $db->quoteName('#__jeproshop_customer') . " AS customer LEFT JOIN " . $db->quoteName('#__jeproshop_gender_lang') . " AS gender_lang ";
-            $query .= " ON (customer.gender_id = gender_lang.gender_id AND gender_lang.lang_id = " . $lang_id . ") " . $joinShop ." WHERE 1 AND customer." . $db->quoteName('deleted') . " = 0 ORDER BY ";
+            $query .= " customer.date_add DESC LIMIT 1 ) AS connect FROM " . $db->quoteName('#__jeproshop_customer') . " AS customer "; //LEFT JOIN " . $db->quoteName('#__jeproshop_gender_lang') . " AS gender_lang ";
+            $query .=  $joinShop ." WHERE 1 AND customer." . $db->quoteName('deleted') . " = 0 ORDER BY ";
             $query .= $db->quoteName('date_add') . $whereShop;
 
             $db->setQuery($query);
